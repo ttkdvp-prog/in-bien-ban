@@ -497,8 +497,30 @@
                 renderForm(demoData);
             } else {
                 document.querySelectorAll('.watermark').forEach(el => el.style.display = 'none');
-                demoData.BienBanSuCo.Id_BienBan = id; 
-                renderForm(demoData); 
+                
+                // Hiển thị trạng thái đang tải
+                document.body.innerHTML = "<h2 style='text-align:center; margin-top: 50px; font-family: sans-serif; color: #666;'>Đang kéo dữ liệu mới nhất từ Hệ thống...</h2>" + document.body.innerHTML;
+                
+                const GAS_URL = "https://script.google.com/macros/s/AKfycbwVaKKOLMHZATF-mwqgYNqLb9Cie8DpKtFBLnCsme6DaLm-NaY7zfccMjGV8Qr5dsRA/exec"; // Thay bằng link Web App của Google Apps Script
+                
+                fetch(GAS_URL + "?id=" + id)
+                    .then(response => response.json())
+                    .then(data => {
+                        // Xóa dòng chữ đang tải
+                        var hd = document.body.firstChild;
+                        if(hd.tagName === 'H2') document.body.removeChild(hd);
+                        
+                        if(data.error) {
+                            alert("Lỗi kéo dữ liệu: " + data.error);
+                            return;
+                        }
+                        
+                        renderForm(data);
+                    })
+                    .catch(error => {
+                        alert("Lỗi kết nối tới Google Sheets API: " + error);
+                        console.error(error);
+                    });
             }
         }
 
