@@ -85,3 +85,71 @@ function createDatabaseStructure() {
   // Thông báo tới người dùng khi kết thúc
   SpreadsheetApp.getUi().alert("Đã tạo xong cấu trúc và Tự động chèn 2 bản ghi Dữ Liệu Mẫu (Sample Data) cho Bảng Sự cố!");
 }
+
+/**
+ * Hàm Trả Về Dữ Liệu Gọi Từ Web (Dùng làm API kết nối Web in Vercel)
+ */
+function doGet(e) {
+  var id = e.parameter.id;
+  if (!id) {
+    return ContentService.createTextOutput(JSON.stringify({error: "Thiếu tham số ID"})).setMimeType(ContentService.MimeType.JSON);
+  }
+  
+  var ss = SpreadsheetApp.getActiveSpreadsheet();
+  
+  // Đọc Bảng Cha: BienBanSuCo
+  var sheetBB = ss.getSheetByName("BienBanSuCo");
+  var dataBB = sheetBB.getDataRange().getValues();
+  var headersBB = dataBB[0];
+  var bbRecord = null;
+  
+  for (var i = 1; i < dataBB.length; i++) {
+    // ID Cột 1 (Index 0)
+    if (dataBB[i][0] == id) { 
+      bbRecord = {};
+      for (var j = 0; j < headersBB.length; j++) {
+        var val = dataBB[i][j];
+        if (val instanceof Date) {
+           var dd = String(val.getDate()).padStart(2, '0');
+           var mm = String(val.getMonth() + 1).padStart(2, '0');
+           var yyyy = val.getFullYear();
+           val = dd + '/' + mm + '/' + yyyy;
+        }
+        bbRecord[headersBB[j]] = val;
+      }
+      break;
+    }
+  }
+  
+  if (!bbRecord) {
+    // Không tìm thấy biên bản
+    return ContentService.createTextOutput(JSON.stringify({error: "Không tìm thấy dữ liệu Biên Bản"})).setMimeType(ContentService.MimeType.JSON);
+  }
+  
+  // Đọc Bảng Con: ChiTietVatTu
+  var sheetVT = ss.getSheetByName("ChiTietVatTu");
+  var dataVT = sheetVT.getDataRange().getValues();
+  var headersVT = dataVT[0];
+  var vtRecords = [];
+  
+  var idBienBanColIdx = headersVT.indexOf("Id_BienBan");
+  
+  for (var i = 1; i < dataVT.length; i++) {
+    if (dataVT[i][idBienBanColIdx] == id) {
+      var vtRec = {};
+      for (var j = 0; j < headersVT.length; j++) {
+        vtRec[headersVT[j]] = dataVT[i][j];
+      }
+      vtRecords.push(vtRec);
+    }
+  }
+  
+  var result = {
+    BienBanSuCo: bbRecord,
+    ChiTietVatTu: vtRecords
+  };
+  
+  // Trả về luồng JSON cho Vercel sử dụng
+  return ContentService.createTextOutput(JSON.stringify(result))
+    .setMimeType(ContentService.MimeType.JSON);
+}
