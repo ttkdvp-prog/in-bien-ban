@@ -5,10 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>In Báo Cáo Sự Cố</title>
     <style id="doc-styles">
-        /* Cấu hình Page chuẩn A4 */
         @page {
             size: A4;
-            margin: 20mm; /* Canh lề 20mm 4 cạnh theo chuẩn yêu cầu */
+            margin: 0; /* Chỉnh 0 để chặn trình duyệt tự động chèn Web URL / Tiêu đề */
         }
 
         body {
@@ -153,11 +152,11 @@
         .btn-doc:hover { background-color: #218838; }
 
         @media print {
-            body { background: transparent; }
+            body { background: transparent; margin: 0; }
             .a4-page {
                 box-shadow: none;
                 margin: 0;
-                padding: 0; /* Padding do trình duyệt lo (từ margin của @page) */
+                padding: 20mm; /* Bù lại padding 20mm để văn bản vẫn giữ lề chuẩn A4 */
             }
             .control-panel { display: none !important; }
             .val {
