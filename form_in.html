@@ -7,7 +7,7 @@
     <style id="doc-styles">
         @page {
             size: A4;
-            margin: 20mm; /* Bàn giao việc tạo lề 20mm cho Trình duyệt khi in */
+            margin: 0; /* Xóa sổ tuyệt đối URL, Ngày tháng và Phân trang mặc định của Trình Duyệt */
         }
 
         body {
@@ -27,7 +27,7 @@
             width: 210mm;
             min-height: 297mm;
             background: white;
-            padding: 0 20mm 20mm 20mm; /* Bỏ lề trên bằng CSS, dùng thẻ spacer ảo */
+            padding: 0 20mm; /* Lề trái, phải. Lề trên/dưới do thead/tfoot phụ trách */
             box-sizing: border-box;
             box-shadow: 0 0 15px rgba(0,0,0,0.2);
             margin: 20px auto; /* Canh giữa màn hình */
@@ -163,12 +163,15 @@
             .a4-page {
                 box-shadow: none;
                 margin: 0;
-                padding: 0; /* Bỏ đệm ảo, để trình duyệt tự siết lề thật 20mm */
+                padding: 0 20mm; /* Siết lề 2 bên 20mm. Lề trên dưới do Thead dập tự động */
                 page-break-after: always;
             }
-            .spacer-top {
-                display: none; /* Ẩn cục nam châm lề lúc nãy khi in, vì máy in đã có margin chuẩn */
-            }
+            /* Table Print Hack: Lặp tiêu đề (margin trên) và chân bảng (margin dưới) khi nhảy trang */
+            .print-table { width: 100%; border: none; border-collapse: collapse; }
+            .print-thead { display: table-header-group; }
+            .print-tfoot { display: table-footer-group; }
+            .print-thead td, .print-tfoot td { height: 20mm; border: none; padding: 0; }
+            .print-tbody td { border: none; padding: 0; }
             .control-panel { display: none !important; }
             .val {
                 /* Ép trình duyệt in màu chứ không ép đen trắng */
@@ -194,8 +197,11 @@
     <div id="document-content">
         <!-- TRANG 1: TỜ TRÌNH -->
         <div class="a4-page">
-            <div class="spacer-top" style="height: 20mm;"></div> <!-- Khối tạo lề trên tuyệt đối khi In -->
-            <div class="watermark">BẢN DEMO - KHÔNG CÓ GIÁ TRỊ LƯU HÀNH</div>
+            <table class="print-table">
+                <thead class="print-thead"><tr><td></td></tr></thead>
+                <tfoot class="print-tfoot"><tr><td></td></tr></tfoot>
+                <tbody class="print-tbody"><tr><td>
+                    <div class="watermark">BẢN DEMO - KHÔNG CÓ GIÁ TRỊ LƯU HÀNH</div>
         
         <!-- PHẦN 1: TỜ TRÌNH -->
         <table class="header-table">
@@ -274,12 +280,17 @@
                 </td>
             </tr>
         </table>
+                </td></tr></tbody>
+            </table>
         </div> <!-- Kết thúc Trang 1 -->
         
         <!-- TRANG 2: BIÊN BẢN NGHIỆM THU -->
         <div class="a4-page">
-            <div class="spacer-top" style="height: 20mm;"></div> <!-- Khối tạo lề trên tuyệt đối khi In -->
-            <div class="watermark">BẢN DEMO - KHÔNG CÓ GIÁ TRỊ LƯU HÀNH</div>
+            <table class="print-table">
+                <thead class="print-thead"><tr><td></td></tr></thead>
+                <tfoot class="print-tfoot"><tr><td></td></tr></tfoot>
+                <tbody class="print-tbody"><tr><td>
+                    <div class="watermark">BẢN DEMO - KHÔNG CÓ GIÁ TRỊ LƯU HÀNH</div>
             <!-- PHẦN 2: BIÊN BẢN NGHIỆM THU -->
         <table class="header-table">
             <tr>
@@ -370,6 +381,8 @@
                 </td>
             </tr>
         </table>
+                </td></tr></tbody>
+            </table>
         </div> <!-- Kết thúc Trang 2 -->
     </div> <!-- Kết thúc Document Content -->
 
