@@ -358,6 +358,18 @@
             return { d: ".....", m: ".....", y: "........" };
         }
 
+        // Hàm xử lý định dạng chữ "tổ hạ tầng Phúc Yên" (Chữ tổ hạ tầng viết thường, địa danh viết Hoa chữ cái đầu)
+        function formatToHaTang(str) {
+            if (!str) return "";
+            let words = str.toLowerCase().split(' ');
+            for (let i = 0; i < words.length; i++) {
+                if (!['tổ', 'hạ', 'tầng'].includes(words[i]) && words[i].length > 0) {
+                    words[i] = words[i].charAt(0).toUpperCase() + words[i].slice(1);
+                }
+            }
+            return words.join(' ');
+        }
+
         // Dữ liệu mô phỏng theo cấu trúc JSON bạn yêu cầu
         const demoData = {
             "BienBanSuCo": {
@@ -392,7 +404,7 @@
             
             // Map text areas
             const fieldMap = {
-                'DonVi_DeXuat': bb.DonVi_DeXuat, 'DonVi_DeXuat2': bb.DonVi_DeXuat, 'DonVi_DeXuat3': bb.DonVi_DeXuat, 'DonVi_DeXuat4': bb.DonVi_DeXuat,
+                'DonVi_DeXuat': bb.DonVi_DeXuat, 'DonVi_DeXuat2': formatToHaTang(bb.DonVi_DeXuat), 'DonVi_DeXuat3': formatToHaTang(bb.DonVi_DeXuat), 'DonVi_DeXuat4': bb.DonVi_DeXuat,
                 'So_ToTrinh': bb.So_ToTrinh, 'DiaDiem_Lap': bb.DiaDiem_Lap,
                 'Ten_TuyenCap': bb.Ten_TuyenCap, 'Ten_TuyenCap2': bb.Ten_TuyenCap, 'Ten_TuyenCap3': bb.Ten_TuyenCap,
                 'NoiDung_ChiDao': bb.NoiDung_ChiDao || "........................................................",
