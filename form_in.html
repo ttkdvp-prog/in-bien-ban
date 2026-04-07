@@ -498,17 +498,24 @@
             } else {
                 document.querySelectorAll('.watermark').forEach(el => el.style.display = 'none');
                 
+                // Ẩn nội dung trang web khi chưa tải xong để tránh hiện dữ liệu cũ (template mặc định)
+                document.querySelectorAll('.a4-page').forEach(el => el.style.display = 'none');
+                
                 // Hiển thị trạng thái đang tải
-                document.body.innerHTML = "<h2 style='text-align:center; margin-top: 50px; font-family: sans-serif; color: #666;'>Đang kéo dữ liệu mới nhất từ Hệ thống...</h2>" + document.body.innerHTML;
+                var loadingEl = document.createElement("h2");
+                loadingEl.id = "loading-text";
+                loadingEl.style.cssText = "text-align:center; margin-top: 100px; font-family: sans-serif; color: #666; width: 100%;";
+                loadingEl.innerText = "Đang lấy dữ liệu Biên bản và Vật tư...";
+                document.body.prepend(loadingEl);
                 
                 const GAS_URL = "https://script.google.com/macros/s/AKfycbyds_XVwkc7OmebDLWN8kkqxtDkPeWKmc-RepjSsToLYiIx_9OZHXx9pHhM0PD1c5gC/exec"; // Thay bằng link Web App của Google Apps Script
                 
                 fetch(GAS_URL + "?id=" + id)
                     .then(response => response.json())
                     .then(data => {
-                        // Xóa dòng chữ đang tải
-                        var hd = document.body.firstChild;
-                        if(hd.tagName === 'H2') document.body.removeChild(hd);
+                        // Xóa chữ Loading
+                        var ld = document.getElementById("loading-text");
+                        if(ld) ld.remove();
                         
                         if(data.error) {
                             alert("Lỗi kéo dữ liệu: " + data.error);
@@ -516,8 +523,13 @@
                         }
                         
                         renderForm(data);
+                        
+                        // Hiện lại nội dung trang web
+                        document.querySelectorAll('.a4-page').forEach(el => el.style.display = 'block');
                     })
                     .catch(error => {
+                        var ld = document.getElementById("loading-text");
+                        if(ld) ld.remove();
                         alert("Lỗi kết nối tới Google Sheets API: " + error);
                         console.error(error);
                     });
