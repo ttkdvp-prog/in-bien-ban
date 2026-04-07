@@ -501,7 +501,7 @@
                 // Hiển thị trạng thái đang tải
                 document.body.innerHTML = "<h2 style='text-align:center; margin-top: 50px; font-family: sans-serif; color: #666;'>Đang kéo dữ liệu mới nhất từ Hệ thống...</h2>" + document.body.innerHTML;
                 
-                const GAS_URL = "https://script.google.com/macros/s/AKfycbwVaKKOLMHZATF-mwqgYNqLb9Cie8DpKtFBLnCsme6DaLm-NaY7zfccMjGV8Qr5dsRA/exec"; // Thay bằng link Web App của Google Apps Script
+                const GAS_URL = "https://script.google.com/macros/s/AKfycbyds_XVwkc7OmebDLWN8kkqxtDkPeWKmc-RepjSsToLYiIx_9OZHXx9pHhM0PD1c5gC/exec"; // Thay bằng link Web App của Google Apps Script
                 
                 fetch(GAS_URL + "?id=" + id)
                     .then(response => response.json())
