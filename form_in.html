@@ -27,7 +27,7 @@
             width: 210mm;
             min-height: 297mm;
             background: white;
-            padding: 20mm 20mm 20mm 20mm; /* Lề trên, phải, dưới, trái. Tôi nắn 2mm thành 20mm cho chuẩn lề giấy A4 */
+            padding: 0 20mm 20mm 20mm; /* Bỏ lề trên bằng CSS, dùng thẻ spacer ảo */
             box-sizing: border-box;
             box-shadow: 0 0 15px rgba(0,0,0,0.2);
             margin: 20px auto; /* Canh giữa màn hình */
@@ -163,7 +163,7 @@
             .a4-page {
                 box-shadow: none;
                 margin: 0;
-                padding: 20mm 20mm 20mm 20mm;
+                padding: 0 20mm 20mm 20mm; /* Dùng spacer chiều cao thực tế thay vì padding-top */
                 page-break-after: always;
             }
             .control-panel { display: none !important; }
@@ -191,6 +191,7 @@
     <div id="document-content">
         <!-- TRANG 1: TỜ TRÌNH -->
         <div class="a4-page">
+            <div style="height: 20mm;"></div> <!-- Khối tạo lề trên tuyệt đối khi In -->
             <div class="watermark">BẢN DEMO - KHÔNG CÓ GIÁ TRỊ LƯU HÀNH</div>
         
         <!-- PHẦN 1: TỜ TRÌNH -->
@@ -274,6 +275,7 @@
         
         <!-- TRANG 2: BIÊN BẢN NGHIỆM THU -->
         <div class="a4-page">
+            <div style="height: 20mm;"></div> <!-- Khối tạo lề trên tuyệt đối khi In -->
             <div class="watermark">BẢN DEMO - KHÔNG CÓ GIÁ TRỊ LƯU HÀNH</div>
             <!-- PHẦN 2: BIÊN BẢN NGHIỆM THU -->
         <table class="header-table">
