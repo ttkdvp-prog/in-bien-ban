@@ -27,10 +27,10 @@
             width: 210mm;
             min-height: 297mm;
             background: white;
-            padding: 20mm 15mm; /* Lề trên/dưới 20mm, lề trái/phải 15mm */
+            padding: 20mm 20mm 20mm 20mm; /* Lề trên, phải, dưới, trái. Tôi nắn 2mm thành 20mm cho chuẩn lề giấy A4 */
             box-sizing: border-box;
             box-shadow: 0 0 15px rgba(0,0,0,0.2);
-            margin: 20px 0;
+            margin: 20px auto; /* Canh giữa màn hình */
             position: relative;
             overflow: hidden;
         }
@@ -163,7 +163,8 @@
             .a4-page {
                 box-shadow: none;
                 margin: 0;
-                padding: 20mm 15mm; /* Bù lại padding để văn bản giữ lề trái/phải 15mm */
+                padding: 20mm 20mm 20mm 20mm;
+                page-break-after: always;
             }
             .control-panel { display: none !important; }
             .val {
@@ -187,8 +188,10 @@
     </div>
 
     <!-- Nội dung Document -->
-    <div class="a4-page" id="document-content">
-        <div class="watermark" id="watermark">BẢN DEMO - KHÔNG CÓ GIÁ TRỊ LƯU HÀNH</div>
+    <div id="document-content">
+        <!-- TRANG 1: TỜ TRÌNH -->
+        <div class="a4-page">
+            <div class="watermark">BẢN DEMO - KHÔNG CÓ GIÁ TRỊ LƯU HÀNH</div>
         
         <!-- PHẦN 1: TỜ TRÌNH -->
         <table class="header-table">
@@ -267,10 +270,12 @@
                 </td>
             </tr>
         </table>
+        </div> <!-- Kết thúc Trang 1 -->
         
-        <div style="page-break-after: always; height: 50px;"></div>
-
-        <!-- PHẦN 2: BIÊN BẢN NGHIỆM THU -->
+        <!-- TRANG 2: BIÊN BẢN NGHIỆM THU -->
+        <div class="a4-page">
+            <div class="watermark">BẢN DEMO - KHÔNG CÓ GIÁ TRỊ LƯU HÀNH</div>
+            <!-- PHẦN 2: BIÊN BẢN NGHIỆM THU -->
         <table class="header-table">
             <tr>
                 <td colspan="2" style="text-align: center;">
@@ -355,7 +360,8 @@
                 </td>
             </tr>
         </table>
-    </div>
+        </div> <!-- Kết thúc Trang 2 -->
+    </div> <!-- Kết thúc Document Content -->
 
     <!-- SCRIPT TÍCH HỢP -->
     <script>
@@ -464,16 +470,10 @@
 
             if (!id) {
                 // Không có ID => Chế độ Demo
-                document.getElementById('watermark').style.display = 'block';
+                document.querySelectorAll('.watermark').forEach(el => el.style.display = 'block');
                 renderForm(demoData);
             } else {
-                // Nếu có ID, thực tế bạn sẽ gọi AJAX tới AppSheet API. 
-                // Ở đây mô phỏng Promise chờ gọi API và đổ kết trả về
-                // var response = await fetch("APP_SHEET_API_URL/FIND?id="+id, { headers kết nối ... });
-                // var rootData = await response.json();
-                
-                // For demonstration, render demo data with ID
-                document.getElementById('watermark').style.display = 'none'; // Ẩn watermark vì là phiếu thật
+                document.querySelectorAll('.watermark').forEach(el => el.style.display = 'none');
                 demoData.BienBanSuCo.Id_BienBan = id; 
                 renderForm(demoData); 
             }
@@ -489,10 +489,10 @@
                          "xmlns='http://www.w3.org/TR/REC-html40'>"+
                          "<head><meta charset='utf-8'><style>"+ styles +"</style></head><body>";
             
-            // Xóa watermark và btn trước khi export word
+            // Xóa toàn bộ watermark trước khi export word
             var clone = document.getElementById("document-content").cloneNode(true);
-            var wm = clone.querySelector('.watermark');
-            if(wm) wm.parentNode.removeChild(wm);
+            var wms = clone.querySelectorAll('.watermark');
+            wms.forEach(wm => wm.parentNode.removeChild(wm));
 
             var footer = "</body></html>";
             var sourceHTML = header + clone.innerHTML + footer;
