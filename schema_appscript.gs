@@ -97,15 +97,24 @@ function doGet(e) {
   
   var ss = SpreadsheetApp.getActiveSpreadsheet();
   
+  if (id === "ALL") {
+    return ContentService.createTextOutput(JSON.stringify({
+      BienBan: ss.getSheetByName("BienBanSuCo").getDataRange().getValues(),
+      VatTu: ss.getSheetByName("ChiTietVatTu").getDataRange().getValues()
+    })).setMimeType(ContentService.MimeType.JSON);
+  }
+  
   // Đọc Bảng Cha: BienBanSuCo
   var sheetBB = ss.getSheetByName("BienBanSuCo");
   var dataBB = sheetBB.getDataRange().getValues();
   var headersBB = dataBB[0];
   var bbRecord = null;
   
+  var targetId = String(id).trim().toLowerCase();
+  
   for (var i = 1; i < dataBB.length; i++) {
     // ID Cột 1 (Index 0)
-    if (dataBB[i][0] == id) { 
+    if (String(dataBB[i][0]).trim().toLowerCase() === targetId) { 
       bbRecord = {};
       for (var j = 0; j < headersBB.length; j++) {
         var val = dataBB[i][j];
@@ -122,8 +131,7 @@ function doGet(e) {
   }
   
   if (!bbRecord) {
-    // Không tìm thấy biên bản
-    return ContentService.createTextOutput(JSON.stringify({error: "Không tìm thấy dữ liệu Biên Bản"})).setMimeType(ContentService.MimeType.JSON);
+    bbRecord = {}; // Trả về rỗng thay vì báo lỗi cứng để Web vẫn load
   }
   
   // Đọc Bảng Con: ChiTietVatTu
@@ -132,10 +140,19 @@ function doGet(e) {
   var headersVT = dataVT[0];
   var vtRecords = [];
   
-  var idBienBanColIdx = headersVT.indexOf("Id_BienBan");
-  
   for (var i = 1; i < dataVT.length; i++) {
-    if (dataVT[i][idBienBanColIdx] == id) {
+    var matchFound = false;
+    
+    // Tự động quét toàn bộ các cột trong dòng, tìm xem có chứa ID sự cố không
+    for(var c = 0; c < headersVT.length; c++) {
+      if(String(dataVT[i][c]).trim().toLowerCase() === targetId) {
+        matchFound = true;
+        break;
+      }
+    }
+    
+    // Nếu tìm thấy bất kỳ cột nào chứa ID sự cố, bế dòng đó vào Vật Tư
+    if (matchFound) {
       var vtRec = {};
       for (var j = 0; j < headersVT.length; j++) {
         vtRec[headersVT[j]] = dataVT[i][j];
