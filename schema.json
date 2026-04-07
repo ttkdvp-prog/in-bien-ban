@@ -1,0 +1,38 @@
+{
+  "BienBanSuCo": {
+    "Id_BienBan": "TTr-TTHT-PYN-05012026",
+    "DonVi_DeXuat": "TỔ HẠ TẦNG PHÚC YÊN",
+    "So_ToTrinh": "/TTr-TTHT-PYN",
+    "DiaDiem_Lap": "Phú Thọ",
+    "NgayLap_ToTrinh": "05/01/2026",
+    "Ten_TuyenCap": "Ngô Miễn – Phường Phúc Yên",
+    "NoiDung_ChiDao": "",
+    "ThoiGian_HoanThanh": "",
+    "NoiDung_SuaChua": "Ra căng kéo lại cáp quang loại 4 FO, 8 FO, 48 FO đoạn từ Ngô Miễn – Phường Phúc Yên, đấu nối tủ hộp PON, hàn nối măng sông, đấu nối dây nhảy để bảo đảm an toàn cho tuyến cáp.",
+    "ViTri_SuaChua": "Ngô Miễn – Phường Phúc Yên",
+    "So_Eoffice": "/VBĐT",
+    "Ngay_NghiemThu": "09/01/2026",
+    "DiaDiem_NghiemThu": "TDP Ngô Miễn, Phường Phúc Yên",
+    "PGD_TrungTam": "Nguyễn Công Hoan",
+    "ToTruong_HaTang": "Ngô Tiến Mạnh",
+    "NhanVien_KyThuat": "",
+    "ToTruong_KhaiThac": "Trần Nam Trung",
+    "NhanVien_KhaiThac": ""
+  },
+  "ChiTietVatTu": [
+    {
+      "Id_VatTu": "VT-001",
+      "Id_BienBan": "TTr-TTHT-PYN-05012026",
+      "Ten_VatTu": "Splitter 1:16 rời đã hàn đâu Connector SC/APC",
+      "DonViTinh": "Bộ",
+      "SoLuong": 1
+    },
+    {
+      "Id_VatTu": "VT-002",
+      "Id_BienBan": "TTr-TTHT-PYN-05012026",
+      "Ten_VatTu": "Splitter rời 1:2 (ko có Connector)",
+      "DonViTinh": "Bộ",
+      "SoLuong": 1
+    }
+  ]
+}

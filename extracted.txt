@@ -1,0 +1,163 @@
+TRUNG TÂM HẠ TẦNG  
+TỔ HẠ TẦNG PHÚC YÊN 
+ 
+Số:       /TTr-TTHT-PYN 
+CỘNG HOÀ XÃ HỘI CHỦ NGHĨA VIỆT NAM 
+Độc lập - Tự do - Hạnh phúc 
+ 
+ 
+Phú Thọ, ngày 05 tháng 01 năm 2026 
+ 
+TỜ TRÌNH 
+V/v Xin Vật tư ứng cứu thông tin mạng lưới tuyến cáp Ngô Miễn – Phường Phúc 
+Yên trên địa bàn Tổ Hạ tầng Phúc Yên 
+ 
+                         Kính trình:  Lãnh đạo Trung tâm hạ tầng. 
+ 
+Ý kiến chỉ đạo của Lãnh đạo Trung tâm Hạ tầng site Vĩnh Phúc 
+- Nội dung: 
+ 
+ 
+ 
+                                                            
+- Thời gian hoàn thành: 
+ 
+Để phục vụ ứng cứu thông tin và phát triển mở rộng mạng lưới tuyến cáp Ngô Miễn 
+– Phường Phúc Yên tổ hạ tầng Phúc Yên kính đề nghị lãnh đạo Trung tâm cấp cho các vật 
+tư cụ thể như sau: 
+1. Nội dung công việc: 
+- Nội dung: Ra căng kéo lại cáp quang loại 4 FO, 8 FO, 48 FO đoạn từ Ngô Miễn – 
+Phường Phúc Yên, đấu nối tủ hộp PON, hàn nối măng sông, đấu nối dây nhảy để 
+bảo đảm an toàn cho tuyến cáp. 
+- Vị trí sửa chữa: Ngô Miễn – Phường Phúc Yên 
+2. Số lượng vật tư được sử dụng để sửa chữa: 
+ 
+STT Vật tư ĐVT Số lượng 
+1 Splitter 1:16 rời đã hàn đâu Connector SC/APC Bộ 1 
+2 Splitter rời 1:2 (ko có Connector) Bộ 1 
+Để hoàn thành nhiệm vụ Tổ Hạ tầng Phúc Yên kính trình lãnh đạo xem xét chỉ đạo 
+và phê duyệt để tổ hạ tầng Phúc Yên triển khai kịp thời. 
+Trân trọng kính trình./. 
+  
+Nơi nhận: 
+ - Như k/g; 
+ - Lưu VT. 
+ 
+ Số eoffice:               /VBĐT 
+ 
+ 
+ 
+ 
+    
+ 
+ 
+ 
+ 
+ 
+    
+ 
+TỔ TRƯỞNG 
+TỔ HT PHÚC YÊN 
+ 
+ 
+ 
+ 
+Ngô Tiến Mạnh  
+CỘNG HÒA XÃ HỘI CHỦ NGHĨA VIỆT NAM 
+Độc lập  - Tự do - Hạnh phúc 
+ 
+BIÊN  BẢN  
+NGHIỆM THU VÀ QUYẾT TOÁN SAU SỬA CHỮA 
+ 
+Hôm nay, ngày 09 tháng 01 năm 2026  tại TDP Ngô Miễn, Phường Phúc Yên , 
+Chúng tôi gồm : 
+ 
+A. THÀNH PHẦN THAM GIA:  
+I. ĐẠI DIỆN: TRUNG TÂM HẠ TẦNG. 
+1. Ông :    Nguyễn Công Hoan        Chức vụ: Phó Giám đốc 
+II. ĐẠI DIỆN: TỔ HẠ TẦNG SITE VĨNH PHÚC 
+ 1. Ông :      Ngô Tiến Mạnh Chức vụ:  Tổ trưởng 
+ 2. Ông :  …………….. Chức vụ: Nhân viên Kỹ thuật 
+III. ĐẠI DIỆN: TỔ KHAI THÁC HỆ THỐNG SITE VĨNH PHÚC 
+ 1. Ông :     Trần Nam Trung Chức vụ:  Tổ trưởng 
+ 2. Ông :  …………….. Chức vụ: ............. 
+ 
+B. NỘI DUNG: 
+Các Bên thực hiện việc nghiệm thu và quyết toán khối lượng công việc sau sửa chữa 
+kéo cáp thay dây thuê bao tuyến cáp Ngô Miễn – Phường Phúc Yên, nội dung như sau: 
+3. Nội dung công việc: 
+- Nội dung: Ra căng kéo lại cáp quang loại 4 FO, 8 FO, 48 FO đoạn từ Ngô Miễn – 
+Phường Phúc Yên, đấu nối tủ hộp PON, hàn nối măng sông, đấu nối dây nhảy  để 
+bảo đảm an toàn cho tuyến cáp. 
+- Vị trí sửa chữa: Ngô Miễn – Phường Phúc Yên 
+4. Số lượng vật tư được sử dụng để sửa chữa: 
+ 
+STT Vật tư ĐVT Số lượng 
+1 Splitter 1:16 rời đã hàn đâu Connector SC/APC Bộ 1 
+2 Splitter rời 1:2 (ko có Connector) Bộ 1 
+ 
+5. Quyết toán: Đề nghị quyết toán khối lượng công việc và vật tư trên 
+IV. KẾT LUẬN: 
+ Các bên tham gia nghiệm thu nhất trí với các nội dung sau:  
+- Sau khi sửa chữa, tuyến cáp đảm bảo về kỹ thuật, chất lượng và an toàn để khai thác 
+sử dụng. Bàn giao cho Tổ Hạ tầng Phúc Yên tiếp tục quản lý và khai thác tuyến cáp trên. 
+- Nhất trí nghiệm thu và Đề nghị quyết toán khối lượng công việc và số vật tư như 
+trên. Các Bên nhất trí ký vào Biên bản nghiệm thu. Biên bản thành 06 bản, mỗi Bên giữ 02 
+bản có giá trị pháp lý như nhau. 
+ 
+ĐẠI DIỆN  
+TỔ HẠ TẦNG PHÚC YÊN 
+TỔ TRƯỞNG 
+ 
+ 
+ 
+ 
+ 
+NGÔ TIẾN MẠNH 
+ĐẠI DIỆN  
+TỔ KTHT SITE VĨNH PHÚC 
+TỔ TRƯỞNG 
+ 
+ 
+ 
+ 
+ 
+TRẦN NAM TRUNG 
+ 
+ĐẠI DIỆN  
+TRUNG TÂM HẠ TẦNG 
+PHÓ GIÁM ĐỐC 
+ 
+ 
+ 
+ 
+ 
+NGUYỄN CÔNG HOAN  
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 

@@ -1,0 +1,495 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>In Báo Cáo Sự Cố</title>
+    <style id="doc-styles">
+        /* Cấu hình Page chuẩn A4 */
+        @page {
+            size: A4;
+            margin: 20mm; /* Canh lề 20mm 4 cạnh theo chuẩn yêu cầu */
+        }
+
+        body {
+            font-family: "Times New Roman", Times, serif;
+            font-size: 13pt; /* Chuẩn văn bản hành chính */
+            line-height: 1.5;
+            color: #000;
+            background: #f0f2f5;
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        /* Container của trang A4 trên màn hình */
+        .a4-page {
+            width: 210mm;
+            min-height: 297mm;
+            background: white;
+            padding: 20mm;
+            box-sizing: border-box;
+            box-shadow: 0 0 15px rgba(0,0,0,0.2);
+            margin: 20px 0;
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* Chữ của dữ liệu AppSheet sẽ có màu xanh đậm */
+        .val {
+            color: #003366; 
+        }
+
+        /* Bố cục văn bản */
+        .header-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+        }
+        .header-table td {
+            vertical-align: top;
+            text-align: center;
+        }
+        .line-solid {
+            border-bottom: 1px solid #000;
+            width: 50%;
+            margin: 5px auto;
+            display: block;
+        }
+
+        .doc-title {
+            text-align: center;
+            font-weight: bold;
+            font-size: 14pt;
+            margin-top: 10px;
+            margin-bottom: 20px;
+        }
+
+        .p-justify {
+            text-align: justify;
+            margin: 5px 0;
+        }
+
+        .p-indent {
+            text-indent: 10mm;
+            text-align: justify;
+            margin: 5px 0;
+        }
+
+        /* Bảng danh sách vật tư */
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+        }
+        .data-table th, .data-table td {
+            border: 1px solid #000;
+            padding: 5px;
+            text-align: center;
+        }
+        .data-table th {
+            font-weight: bold;
+        }
+        .data-table .text-left {
+            text-align: left;
+        }
+
+        /* Thành phần ký tên */
+        .sign-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        .sign-table td {
+            text-align: center;
+            vertical-align: top;
+            padding-bottom: 80px; /* Không gian ký */
+            font-weight: bold;
+        }
+
+        /* Hiệu ứng Watermark Demo */
+        .watermark {
+            position: absolute;
+            top: 40%;
+            left: 50%;
+            transform: translate(-50%, -50%) rotate(-45deg);
+            font-size: 50pt;
+            color: rgba(255, 0, 0, 0.15);
+            white-space: nowrap;
+            pointer-events: none;
+            z-index: 100;
+            font-weight: bold;
+            display: none; /* Tính năng JS sẽ bật cái này */
+        }
+
+        /* Vùng Nút Bấm Xử lý - Sẽ ẩn đi khi in thực tế */
+        .control-panel {
+            background: white;
+            padding: 15px;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            margin: 20px 0 0 0;
+            display: flex;
+            gap: 15px;
+            width: 210mm;
+            justify-content: center;
+            box-sizing: border-box;
+        }
+
+        .btn {
+            background-color: #007bff;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            font-size: 14pt;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: 0.3s;
+        }
+        .btn:hover { background-color: #0056b3; }
+        .btn-doc { background-color: #28a745; }
+        .btn-doc:hover { background-color: #218838; }
+
+        @media print {
+            body { background: transparent; }
+            .a4-page {
+                box-shadow: none;
+                margin: 0;
+                padding: 0; /* Padding do trình duyệt lo (từ margin của @page) */
+            }
+            .control-panel { display: none !important; }
+            .val {
+                /* Ép trình duyệt in màu chứ không ép đen trắng */
+                -webkit-print-color-adjust: exact;
+                color: #003366 !important; 
+            }
+            .watermark {
+                -webkit-print-color-adjust: exact;
+                color: rgba(255, 0, 0, 0.15) !important;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Panel nút bấm -->
+    <div class="control-panel no-print">
+        <button class="btn" onclick="window.print()">🖨️ In / Xuất PDF (20mm Lề)</button>
+        <button class="btn btn-doc" onclick="exportHTML()">📄 Tải xuống DOCX (Word)</button>
+    </div>
+
+    <!-- Nội dung Document -->
+    <div class="a4-page" id="document-content">
+        <div class="watermark" id="watermark">BẢN DEMO - KHÔNG CÓ GIÁ TRỊ LƯU HÀNH</div>
+        
+        <!-- PHẦN 1: TỜ TRÌNH -->
+        <table class="header-table">
+            <tr>
+                <td style="width: 40%;">
+                    TRUNG TÂM HẠ TẦNG<br>
+                    <b><span class="val" id="DonVi_DeXuat">TỔ HẠ TẦNG PHÚC YÊN</span></b><br>
+                    <span class="line-solid" style="width:120px;"></span>
+                    <p style="margin:5px 0;">Số: <span class="val" id="So_ToTrinh">/TTr-TTHT-PYN</span></p>
+                </td>
+                <td style="width: 60%;">
+                    <b>CỘNG HOÀ XÃ HỘI CHỦ NGHĨA VIỆT NAM</b><br>
+                    <b>Độc lập - Tự do - Hạnh phúc</b><br>
+                    <span class="line-solid" style="width:200px;"></span>
+                    <p style="margin:5px 0; font-style: italic;">
+                        <span class="val" id="DiaDiem_Lap">Phú Thọ</span>, ngày <span class="val" id="dNgay">05</span> tháng <span class="val" id="dThang">01</span> năm <span class="val" id="dNam">2026</span>
+                    </p>
+                </td>
+            </tr>
+        </table>
+
+        <div class="doc-title">
+            TỜ TRÌNH<br>
+            <span style="font-weight: normal;">V/v Xin Vật tư ứng cứu thông tin mạng lưới tuyến cáp <span class="val" id="Ten_TuyenCap">Ngô Miễn – Phường Phúc Yên</span><br>
+            trên địa bàn <span class="val" id="DonVi_DeXuat2">Tổ Hạ tầng Phúc Yên</span></span>
+        </div>
+
+        <p class="p-justify" style="text-align: center; margin-bottom: 20px;">
+            <b>Kính trình:</b> Lãnh đạo Trung tâm hạ tầng.
+        </p>
+
+        <p class="p-justify">Ý kiến chỉ đạo của Lãnh đạo Trung tâm Hạ tầng site Vĩnh Phúc</p>
+        <p class="p-justify">- Nội dung: <span class="val" id="NoiDung_ChiDao">.......................................................................</span></p>
+        <p class="p-justify">- Thời gian hoàn thành: <span class="val" id="ThoiGian_HoanThanh">...........................................................</span></p>
+        
+        <p class="p-indent">Để phục vụ ứng cứu thông tin và phát triển mở rộng mạng lưới tuyến cáp <span class="val" id="Ten_TuyenCap2">Ngô Miễn – Phường Phúc Yên</span> tổ hạ tầng <span class="val" id="DonVi_DeXuat3">Phúc Yên</span> kính đề nghị lãnh đạo Trung tâm cấp cho các vật tư cụ thể như sau:</p>
+        
+        <p class="p-justify"><b>1. Nội dung công việc:</b></p>
+        <p class="p-justify">- Nội dung: <span class="val" id="NoiDung_SuaChua">Ra căng kéo lại cáp quang loại 4 FO, 8 FO, 48 FO đoạn từ Ngô Miễn – Phường Phúc Yên, đấu nối tủ hộp PON, hàn nối măng sông, đấu nối dây nhảy để bảo đảm an toàn cho tuyến cáp.</span></p>
+        <p class="p-justify">- Vị trí sửa chữa: <span class="val" id="ViTri_SuaChua">Ngô Miễn – Phường Phúc Yên</span></p>
+        
+        <p class="p-justify"><b>2. Số lượng vật tư được sử dụng để sửa chữa:</b></p>
+
+        <table class="data-table">
+            <thead>
+                <tr>
+                    <th style="width: 10%;">STT</th>
+                    <th style="width: 55%;">Vật tư</th>
+                    <th style="width: 15%;">ĐVT</th>
+                    <th style="width: 20%;">Số lượng</th>
+                </tr>
+            </thead>
+            <tbody id="vattu_table_body1">
+                <!-- Data will be injected here -->
+            </tbody>
+        </table>
+
+        <p class="p-indent">Để hoàn thành nhiệm vụ Tổ Hạ tầng Phúc Yên kính trình lãnh đạo xem xét chỉ đạo và phê duyệt để tổ hạ tầng Phúc Yên triển khai kịp thời.</p>
+        <p class="p-justify" style="margin-bottom: 20px;">Trân trọng kính trình./.</p>
+
+        <table style="width: 100%; border-collapse: collapse;">
+            <tr>
+                <td style="width: 50%; vertical-align: top; padding-left: 20px;">
+                    <i><b>Nơi nhận:</b></i><br>
+                    - Như k/g;<br>
+                    - Lưu VT.<br><br>
+                    Số eoffice: <span class="val" id="So_Eoffice">/VBĐT</span>
+                </td>
+                <td style="width: 50%; vertical-align: top; text-align: center;">
+                    <b>TỔ TRƯỞNG</b><br>
+                    <b><span class="val" id="DonVi_DeXuat4" style="text-transform: uppercase;">TỔ HT PHÚC YÊN</span></b><br>
+                    <br><br><br><br><br>
+                    <span class="val" id="ToTruong_HaTang">Ngô Tiến Mạnh</span>
+                </td>
+            </tr>
+        </table>
+        
+        <div style="page-break-after: always; height: 50px;"></div>
+
+        <!-- PHẦN 2: BIÊN BẢN NGHIỆM THU -->
+        <table class="header-table">
+            <tr>
+                <td colspan="2" style="text-align: center;">
+                    <b>CỘNG HÒA XÃ HỘI CHỦ NGHĨA VIỆT NAM</b><br>
+                    <b>Độc lập - Tự do - Hạnh phúc</b><br>
+                    <span class="line-solid" style="width:200px;"></span>
+                </td>
+            </tr>
+        </table>
+
+        <div class="doc-title" style="margin-top: 0;">
+            BIÊN BẢN<br>
+            NGHIỆM THU VÀ QUYẾT TOÁN SAU SỬA CHỮA
+        </div>
+
+        <p class="p-indent" style="font-style: italic;">
+            Hôm nay, ngày <span class="val" id="nNgay">09</span> tháng <span class="val" id="nThang">01</span> năm <span class="val" id="nNam">2026</span> tại <span class="val" id="DiaDiem_NghiemThu">TDP Ngô Miễn, Phường Phúc Yên</span>, Chúng tôi gồm:
+        </p>
+        
+        <p class="p-justify"><b>A. THÀNH PHẦN THAM GIA:</b></p>
+        <p class="p-justify"><b>I. ĐẠI DIỆN: TRUNG TÂM HẠ TẦNG.</b></p>
+        <p class="p-justify">1. Ông: <span class="val" id="PGD_TrungTam" style="display:inline-block; width:200px;">Nguyễn Công Hoan</span> Chức vụ: Phó Giám đốc</p>
+        
+        <p class="p-justify"><b>II. ĐẠI DIỆN: TỔ HẠ TẦNG SITE VĨNH PHÚC</b></p>
+        <p class="p-justify">1. Ông: <span class="val" id="ToTruong_HaTang2" style="display:inline-block; width:200px;">Ngô Tiến Mạnh</span> Chức vụ: Tổ trưởng</p>
+        <p class="p-justify">2. Ông: <span class="val" id="NhanVien_KyThuat" style="display:inline-block; width:200px;">……………..</span> Chức vụ: Nhân viên Kỹ thuật</p>
+
+        <p class="p-justify"><b>III. ĐẠI DIỆN: TỔ KHAI THÁC HỆ THỐNG SITE VĨNH PHÚC</b></p>
+        <p class="p-justify">1. Ông: <span class="val" id="ToTruong_KhaiThac" style="display:inline-block; width:200px;">Trần Nam Trung</span> Chức vụ: Tổ trưởng</p>
+        <p class="p-justify">2. Ông: <span class="val" id="NhanVien_KhaiThac" style="display:inline-block; width:200px;">……………..</span> Chức vụ: .............</p>
+        
+        <p class="p-justify" style="margin-top: 15px;"><b>B. NỘI DUNG:</b></p>
+        <p class="p-justify">Các Bên thực hiện việc nghiệm thu và quyết toán khối lượng công việc sau sửa chữa kéo cáp thay dây thuê bao tuyến cáp <span class="val" id="Ten_TuyenCap3">Ngô Miễn – Phường Phúc Yên</span>, nội dung như sau:</p>
+        
+        <p class="p-justify"><b>3. Nội dung công việc:</b></p>
+        <p class="p-justify">- Nội dung: <span class="val" id="NoiDung_SuaChua2">Ra căng kéo lại cáp quang loại 4 FO, 8 FO, 48 FO đoạn từ Ngô Miễn – Phường Phúc Yên, đấu nối tủ hộp PON, hàn nối măng sông, đấu nối dây nhảy để bảo đảm an toàn cho tuyến cáp.</span></p>
+        <p class="p-justify">- Vị trí sửa chữa: <span class="val" id="ViTri_SuaChua2">Ngô Miễn – Phường Phúc Yên</span></p>
+
+        <p class="p-justify"><b>4. Số lượng vật tư được sử dụng để sửa chữa:</b></p>
+        <table class="data-table">
+            <thead>
+                <tr>
+                    <th style="width: 10%;">STT</th>
+                    <th style="width: 55%;">Vật tư</th>
+                    <th style="width: 15%;">ĐVT</th>
+                    <th style="width: 20%;">Số lượng</th>
+                </tr>
+            </thead>
+            <tbody id="vattu_table_body2">
+                <!-- Data will be injected here -->
+            </tbody>
+        </table>
+
+        <p class="p-justify"><b>5. Quyết toán:</b> Đề nghị quyết toán khối lượng công việc và vật tư trên</p>
+        <p class="p-justify"><b>IV. KẾT LUẬN:</b></p>
+        <p class="p-justify">Các bên tham gia nghiệm thu nhất trí với các nội dung sau:</p>
+        <p class="p-justify">- Sau khi sửa chữa, tuyến cáp đảm bảo về kỹ thuật, chất lượng và an toàn để khai thác sử dụng. Bàn giao cho Tổ Hạ tầng Phúc Yên tiếp tục quản lý và khai thác tuyến cáp trên.</p>
+        <p class="p-justify">- Nhất trí nghiệm thu và Đề nghị quyết toán khối lượng công việc và số vật tư như trên. Các Bên nhất trí ký vào Biên bản nghiệm thu. Biên bản thành 06 bản, mỗi Bên giữ 02 bản có giá trị pháp lý như nhau.</p>
+
+        <table class="sign-table">
+            <tr>
+                <td style="width: 33%;">
+                    ĐẠI DIỆN<br>
+                    TỔ HẠ TẦNG PHÚC YÊN<br>
+                    TỔ TRƯỞNG<br>
+                    <br><br><br><br><br>
+                    <span class="val text-upper" id="ToTruong_HaTang3">NGÔ TIẾN MẠNH</span>
+                </td>
+                <td style="width: 33%;">
+                    ĐẠI DIỆN<br>
+                    TỔ KTHT SITE VĨNH PHÚC<br>
+                    TỔ TRƯỞNG<br>
+                    <br><br><br><br><br>
+                    <span class="val text-upper" id="ToTruong_KhaiThac2">TRẦN NAM TRUNG</span>
+                </td>
+                <td style="width: 33%;">
+                    ĐẠI DIỆN<br>
+                    TRUNG TÂM HẠ TẦNG<br>
+                    PHÓ GIÁM ĐỐC<br>
+                    <br><br><br><br><br>
+                    <span class="val text-upper" id="PGD_TrungTam2">NGUYỄN CÔNG HOAN</span>
+                </td>
+            </tr>
+        </table>
+    </div>
+
+    <!-- SCRIPT TÍCH HỢP -->
+    <script>
+        // Hàm chuyển đổi chuỗi ngày MM/DD/YYYY thành Object Ngày, Tháng, Năm
+        function parseDateString(dateStr) {
+            if(!dateStr) return { d: ".....", m: ".....", y: "........" };
+            let parts = dateStr.split('/');
+            if(parts.length === 3) return { d: parts[0].padStart(2, '0'), m: parts[1].padStart(2, '0'), y: parts[2] };
+            return { d: ".....", m: ".....", y: "........" };
+        }
+
+        // Dữ liệu mô phỏng theo cấu trúc JSON bạn yêu cầu
+        const demoData = {
+            "BienBanSuCo": {
+                "Id_BienBan": "TTr-TTHT-PYN-05012026",
+                "DonVi_DeXuat": "TỔ HẠ TẦNG PHÚC YÊN",
+                "So_ToTrinh": "/TTr-TTHT-PYN",
+                "DiaDiem_Lap": "Phú Thọ",
+                "NgayLap_ToTrinh": "05/01/2026",
+                "Ten_TuyenCap": "Ngô Miễn – Phường Phúc Yên",
+                "NoiDung_ChiDao": "Đảm bảo chất lượng mạng theo quy chuẩn.",
+                "ThoiGian_HoanThanh": "Trong ngày",
+                "NoiDung_SuaChua": "Ra căng kéo lại cáp quang loại 4 FO, 8 FO, 48 FO đoạn từ Ngô Miễn – Phường Phúc Yên, đấu nối tủ hộp PON, hàn nối măng sông, đấu nối dây nhảy để bảo đảm an toàn cho tuyến cáp.",
+                "ViTri_SuaChua": "Ngô Miễn – Phường Phúc Yên",
+                "So_Eoffice": "/VBĐT",
+                "Ngay_NghiemThu": "09/01/2026",
+                "DiaDiem_NghiemThu": "TDP Ngô Miễn, Phường Phúc Yên",
+                "PGD_TrungTam": "Nguyễn Công Hoan",
+                "ToTruong_HaTang": "Ngô Tiến Mạnh",
+                "NhanVien_KyThuat": "Nguyễn Văn A",
+                "ToTruong_KhaiThac": "Trần Nam Trung",
+                "NhanVien_KhaiThac": "Lê Văn B"
+            },
+            "ChiTietVatTu": [
+                { "Ten_VatTu": "Splitter 1:16 rời đã hàn đâu Connector SC/APC", "DonViTinh": "Bộ", "SoLuong": 1 },
+                { "Ten_VatTu": "Splitter rời 1:2 (ko có Connector)", "DonViTinh": "Bộ", "SoLuong": 1 }
+            ]
+        };
+
+        // Hàm render dữ liệu ra Giao diện A4
+        function renderForm(data) {
+            const bb = data.BienBanSuCo;
+            
+            // Map text areas
+            const fieldMap = {
+                'DonVi_DeXuat': bb.DonVi_DeXuat, 'DonVi_DeXuat2': bb.DonVi_DeXuat, 'DonVi_DeXuat3': bb.DonVi_DeXuat, 'DonVi_DeXuat4': bb.DonVi_DeXuat,
+                'So_ToTrinh': bb.So_ToTrinh, 'DiaDiem_Lap': bb.DiaDiem_Lap,
+                'Ten_TuyenCap': bb.Ten_TuyenCap, 'Ten_TuyenCap2': bb.Ten_TuyenCap, 'Ten_TuyenCap3': bb.Ten_TuyenCap,
+                'NoiDung_ChiDao': bb.NoiDung_ChiDao || "........................................................",
+                'ThoiGian_HoanThanh': bb.ThoiGian_HoanThanh || "...................................................",
+                'NoiDung_SuaChua': bb.NoiDung_SuaChua, 'NoiDung_SuaChua2': bb.NoiDung_SuaChua,
+                'ViTri_SuaChua': bb.ViTri_SuaChua, 'ViTri_SuaChua2': bb.ViTri_SuaChua,
+                'So_Eoffice': bb.So_Eoffice || "........./VBĐT",
+                'DiaDiem_NghiemThu': bb.DiaDiem_NghiemThu,
+                'PGD_TrungTam': bb.PGD_TrungTam, 'PGD_TrungTam2': bb.PGD_TrungTam?.toUpperCase(),
+                'ToTruong_HaTang': bb.ToTruong_HaTang, 'ToTruong_HaTang2': bb.ToTruong_HaTang, 'ToTruong_HaTang3': bb.ToTruong_HaTang?.toUpperCase(),
+                'NhanVien_KyThuat': bb.NhanVien_KyThuat || ".........................",
+                'ToTruong_KhaiThac': bb.ToTruong_KhaiThac, 'ToTruong_KhaiThac2': bb.ToTruong_KhaiThac?.toUpperCase(),
+                'NhanVien_KhaiThac': bb.NhanVien_KhaiThac || "........................."
+            };
+
+            for(let key in fieldMap) {
+                if(document.getElementById(key)) {
+                    document.getElementById(key).innerText = fieldMap[key];
+                }
+            }
+
+            // Map Date Tờ trình
+            let dateTT = parseDateString(bb.NgayLap_ToTrinh);
+            document.getElementById("dNgay").innerText = dateTT.d;
+            document.getElementById("dThang").innerText = dateTT.m;
+            document.getElementById("dNam").innerText = dateTT.y;
+
+            // Map Date Nghiệm thu
+            let dateNT = parseDateString(bb.Ngay_NghiemThu);
+            document.getElementById("nNgay").innerText = dateNT.d;
+            document.getElementById("nThang").innerText = dateNT.m;
+            document.getElementById("nNam").innerText = dateNT.y;
+
+            // Map Vật Tư Data
+            let rowHTML = '';
+            data.ChiTietVatTu.forEach((item, index) => {
+                rowHTML += `<tr>
+                                <td>${index + 1}</td>
+                                <td class="text-left val">${item.Ten_VatTu}</td>
+                                <td class="val">${item.DonViTinh}</td>
+                                <td class="val">${item.SoLuong}</td>
+                            </tr>`;
+            });
+            document.getElementById("vattu_table_body1").innerHTML = rowHTML;
+            document.getElementById("vattu_table_body2").innerHTML = rowHTML;
+        }
+
+        /* Gọi API Ngầm & Logic Khởi Tạo */
+        window.onload = function() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const id = urlParams.get('id');
+
+            if (!id) {
+                // Không có ID => Chế độ Demo
+                document.getElementById('watermark').style.display = 'block';
+                renderForm(demoData);
+            } else {
+                // Nếu có ID, thực tế bạn sẽ gọi AJAX tới AppSheet API. 
+                // Ở đây mô phỏng Promise chờ gọi API và đổ kết trả về
+                // var response = await fetch("APP_SHEET_API_URL/FIND?id="+id, { headers kết nối ... });
+                // var rootData = await response.json();
+                
+                // For demonstration, render demo data with ID
+                document.getElementById('watermark').style.display = 'none'; // Ẩn watermark vì là phiếu thật
+                demoData.BienBanSuCo.Id_BienBan = id; 
+                renderForm(demoData); 
+            }
+        }
+
+        /* Hàm xuất nội dung thành file MS Word (DOCX chuẩn)  */
+        function exportHTML() {
+            // Lấy style để bê nguyên định dạng vào Word
+            var styles = document.getElementById('doc-styles').innerText;
+            
+            var header = "<html xmlns:o='urn:schemas-microsoft-com:office:office' "+
+                         "xmlns:w='urn:schemas-microsoft-com:office:word' "+
+                         "xmlns='http://www.w3.org/TR/REC-html40'>"+
+                         "<head><meta charset='utf-8'><style>"+ styles +"</style></head><body>";
+            
+            // Xóa watermark và btn trước khi export word
+            var clone = document.getElementById("document-content").cloneNode(true);
+            var wm = clone.querySelector('.watermark');
+            if(wm) wm.parentNode.removeChild(wm);
+
+            var footer = "</body></html>";
+            var sourceHTML = header + clone.innerHTML + footer;
+            
+            // Generate DOC file
+            var source = 'data:application/vnd.ms-word;charset=utf-8,' + encodeURIComponent(sourceHTML);
+            var fileDownload = document.createElement("a");
+            document.body.appendChild(fileDownload);
+            fileDownload.href = source;
+            fileDownload.download = 'Biên_Bản_Hiện_Trường.doc';
+            fileDownload.click();
+            document.body.removeChild(fileDownload);
+        }
+    </script>
+</body>
+</html>
