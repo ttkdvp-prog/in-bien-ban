@@ -27,7 +27,7 @@
             width: 210mm;
             min-height: 297mm;
             background: white;
-            padding: 20mm;
+            padding: 20mm 15mm; /* Lề trên/dưới 20mm, lề trái/phải 15mm */
             box-sizing: border-box;
             box-shadow: 0 0 15px rgba(0,0,0,0.2);
             margin: 20px 0;
@@ -163,7 +163,7 @@
             .a4-page {
                 box-shadow: none;
                 margin: 0;
-                padding: 20mm; /* Bù lại padding 20mm để văn bản vẫn giữ lề chuẩn A4 */
+                padding: 20mm 15mm; /* Bù lại padding để văn bản giữ lề trái/phải 15mm */
             }
             .control-panel { display: none !important; }
             .val {
@@ -221,7 +221,7 @@
         </p>
 
         <div class="leader-box">
-            <p class="p-justify" style="margin-top: 5px; font-weight: bold;">Ý kiến chỉ đạo của Lãnh đạo Trung tâm Hạ tầng</p>
+            <p style="margin-top: 5px; font-weight: bold; text-align: center;">Ý kiến chỉ đạo của Lãnh đạo Trung tâm Hạ tầng</p>
             <p class="p-justify" style="margin-bottom: 20px;">- Nội dung: <span class="val" id="NoiDung_ChiDao">.......................................................................</span></p>
             <p class="p-justify" style="margin-bottom: 5px;">- Thời gian hoàn thành: <span class="val" id="ThoiGian_HoanThanh">...........................................................</span></p>
         </div>
