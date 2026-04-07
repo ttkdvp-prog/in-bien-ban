@@ -7,7 +7,7 @@
     <style id="doc-styles">
         @page {
             size: A4;
-            margin: 0; /* Chỉnh 0 để chặn trình duyệt tự động chèn Web URL / Tiêu đề */
+            margin: 20mm; /* Bàn giao việc tạo lề 20mm cho Trình duyệt khi in */
         }
 
         body {
@@ -163,8 +163,11 @@
             .a4-page {
                 box-shadow: none;
                 margin: 0;
-                padding: 0 20mm 20mm 20mm; /* Dùng spacer chiều cao thực tế thay vì padding-top */
+                padding: 0; /* Bỏ đệm ảo, để trình duyệt tự siết lề thật 20mm */
                 page-break-after: always;
+            }
+            .spacer-top {
+                display: none; /* Ẩn cục nam châm lề lúc nãy khi in, vì máy in đã có margin chuẩn */
             }
             .control-panel { display: none !important; }
             .val {
@@ -191,7 +194,7 @@
     <div id="document-content">
         <!-- TRANG 1: TỜ TRÌNH -->
         <div class="a4-page">
-            <div style="height: 20mm;"></div> <!-- Khối tạo lề trên tuyệt đối khi In -->
+            <div class="spacer-top" style="height: 20mm;"></div> <!-- Khối tạo lề trên tuyệt đối khi In -->
             <div class="watermark">BẢN DEMO - KHÔNG CÓ GIÁ TRỊ LƯU HÀNH</div>
         
         <!-- PHẦN 1: TỜ TRÌNH -->
@@ -275,7 +278,7 @@
         
         <!-- TRANG 2: BIÊN BẢN NGHIỆM THU -->
         <div class="a4-page">
-            <div style="height: 20mm;"></div> <!-- Khối tạo lề trên tuyệt đối khi In -->
+            <div class="spacer-top" style="height: 20mm;"></div> <!-- Khối tạo lề trên tuyệt đối khi In -->
             <div class="watermark">BẢN DEMO - KHÔNG CÓ GIÁ TRỊ LƯU HÀNH</div>
             <!-- PHẦN 2: BIÊN BẢN NGHIỆM THU -->
         <table class="header-table">
