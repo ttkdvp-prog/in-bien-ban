@@ -86,11 +86,15 @@
         /* Bảng danh sách vật tư */
         .data-table {
             width: 100%;
-            border-collapse: collapse;
+            border-collapse: separate; /* BẮT BUỘC bỏ collapse để tránh lỗi mất viền Chrome */
+            border-spacing: 0;
             margin: 15px 0;
+            border-top: 1px solid #000;
+            border-left: 1px solid #000;
         }
         .data-table th, .data-table td {
-            border: 1px solid #000;
+            border-bottom: 1px solid #000;
+            border-right: 1px solid #000;
             padding: 5px;
             text-align: center;
         }
@@ -166,9 +170,14 @@
                 padding: 0 20mm; /* Siết lề 2 bên 20mm. Lề trên dưới do Thead dập tự động */
                 page-break-after: always;
             }
-            @page { margin: 15mm 20mm; }
-            /* Căn bản: Xóa margin mặc định của body, để @page lo liệu */
-            body { margin: 0; }
+            @page { margin: 0; } /* Áp margin 0 để GIẾT URL và Ngày tháng của trình duyệt */
+            
+            /* Table Print Hack: Lặp tiêu đề (margin trên) và chân bảng (margin dưới) khi nhảy trang */
+            .print-table { width: 100%; border: none; border-collapse: collapse; }
+            .print-thead { display: table-header-group; }
+            .print-tfoot { display: table-footer-group; }
+            .print-thead > tr > td, .print-tfoot > tr > td { height: 15mm; border: none; padding: 0; }
+            .print-tbody > tr > td { border: none; padding: 0; }
             
             /* Ngăn trình duyệt cắt đôi dòng chữ lơ lửng */
             p, h1, h2, h3, h4, h5, h6, li {
@@ -200,6 +209,12 @@
     <div id="document-content">
         <!-- TRANG 1: TỜ TRÌNH -->
         <div class="a4-page">
+            <table class="print-table">
+                <thead class="print-thead"><tr><td></td></tr></thead>
+                <tfoot class="print-tfoot"><tr><td></td></tr></tfoot>
+                <tbody class="print-tbody"><tr><td>
+                    <div class="watermark">BẢN DEMO - KHÔNG CÓ GIÁ TRỊ LƯU HÀNH</div>
+        
         <!-- PHẦN 1: TỜ TRÌNH -->
         <table class="header-table">
             <tr>
@@ -277,10 +292,17 @@
                 </td>
             </tr>
         </table>
+                </td></tr></tbody>
+            </table>
         </div> <!-- Kết thúc Trang 1 -->
         
         <!-- TRANG 2: BIÊN BẢN NGHIỆM THU -->
         <div class="a4-page">
+            <table class="print-table">
+                <thead class="print-thead"><tr><td></td></tr></thead>
+                <tfoot class="print-tfoot"><tr><td></td></tr></tfoot>
+                <tbody class="print-tbody"><tr><td>
+                    <div class="watermark">BẢN DEMO - KHÔNG CÓ GIÁ TRỊ LƯU HÀNH</div>
             <!-- PHẦN 2: BIÊN BẢN NGHIỆM THU -->
         <table class="header-table">
             <tr>
@@ -371,6 +393,8 @@
                 </td>
             </tr>
         </table>
+                </td></tr></tbody>
+            </table>
         </div> <!-- Kết thúc Trang 2 -->
     </div> <!-- Kết thúc Document Content -->
 
