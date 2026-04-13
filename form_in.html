@@ -170,8 +170,14 @@
             .print-table { width: 100%; border: none; border-collapse: collapse; }
             .print-thead { display: table-header-group; }
             .print-tfoot { display: table-footer-group; }
-            .print-thead > tr > td, .print-tfoot > tr > td { height: 20mm; border: none; padding: 0; }
+            .print-thead > tr > td, .print-tfoot > tr > td { height: 15mm; border: none; padding: 0; }
             .print-tbody > tr > td { border: none; padding: 0; }
+            
+            /* Ngăn trình duyệt cắt đôi dòng chữ lơ lửng giữa 2 trang */
+            p, h1, h2, h3, h4, h5, h6, li, tr {
+                page-break-inside: avoid;
+            }
+            
             .control-panel { display: none !important; }
             .val {
                 /* Ép trình duyệt in màu chứ không ép đen trắng */
